@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import controllers.IdController;
 import controllers.MessageController;
+import models.Id;
 
-// Simple Shell is a Console view for YouAreEll.
+// Simple Shell is a Console view for views.YouAreEll.
 public class SimpleShell {
 
 
@@ -19,7 +21,7 @@ public class SimpleShell {
         System.out.println(output);
     }
     public static void main(String[] args) throws java.io.IOException {
-
+        ObjectMapper mapper = new ObjectMapper();
         YouAreEll webber = new YouAreEll(new MessageController(), new IdController());
         
         String commandLine;
@@ -69,6 +71,15 @@ public class SimpleShell {
                 if (list.contains("ids")) {
                     String results = webber.get_ids();
                     SimpleShell.prettyPrint(results);
+                    continue;
+                }
+                if (list.contains("newid")){
+
+                    String username = list.get(1);
+                    String githubid = list.get(2);
+                    Id newuser = new Id(username,githubid);
+                    String newUser2 = mapper.writeValueAsString(newuser);
+                    webber.MakeURLCall("/ids","POST",newUser2);
                     continue;
                 }
 

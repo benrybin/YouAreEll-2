@@ -1,4 +1,12 @@
+package views;
+
 import controllers.*;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.ObjectMapper;
+import kong.unirest.Unirest;
+import models.Id;
+import org.json.JSONArray;
 
 public class YouAreEll {
 
@@ -16,6 +24,7 @@ public class YouAreEll {
         YouAreEll urlhandler = new YouAreEll(new MessageController(), new IdController());
         System.out.println(urlhandler.MakeURLCall("/ids", "GET", ""));
         System.out.println(urlhandler.MakeURLCall("/messages", "GET", ""));
+        //System.out.println(testing());
     }
 
     public String get_ids() {
@@ -27,6 +36,20 @@ public class YouAreEll {
     }
 
     public String MakeURLCall(String mainurl, String method, String jpayload) {
-        return "nada";
+
+        String serverName = "http://zipcode.rocks:8085";
+
+        if(method.equals("POST")){
+            serverName = serverName + mainurl;
+            HttpResponse<JsonNode> response = Unirest.post(serverName)
+                    .body(jpayload)
+                    .asJson();
+
+
+        }
+
+        return serverName;
     }
+
+
 }
